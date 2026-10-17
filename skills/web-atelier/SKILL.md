@@ -74,6 +74,8 @@ Never run the full founder or replica packs: a website does not need a CFO.
 - **Scaffold** (no agent needed): `node <A>/scripts/scaffold.mjs <project-root>`. It creates or reuses a
   Next.js + TS + Tailwind 4 app, installs gsap, lenis, three, motion, copies the kit, writes tokens
   placeholders. If the project already exists it only adds what is missing. Read its last 10 lines only.
+  Add `--inventory` when the business sells stock items (`references/inventory.md` decides); the
+  stock section then gets its own sonnet agent in Phase 4 with that file as its brief.
 - **Copy** → one agent (sonnet, medium): writes `src/content/site.ts` (typed, every visible string, alt
   texts, meta, OG text) from BRIEF + DESIGN, following `<T>/references/copy.md`. Copy sells a 60k site;
   never haiku here.

@@ -22,6 +22,7 @@ echo "Dependencies:"
 check() { [ -d "$dest/$1" ] && echo "  ✓ $1" || echo "  ✗ $1 — $2"; }
 check taste-skill "required (art direction scripts). Install it into $dest/taste-skill"
 check playwright-cli "required for parallel browsing: npm i -g @playwright/cli && playwright-cli install --skills"
+check insta-to-md "part of this pack (reinstall)"
 check web-design-guidelines "recommended (QA): from vercel-labs/agent-skills"
 check founder-competitors "optional (strategy)"
 check founder-brand "optional (new brands)"

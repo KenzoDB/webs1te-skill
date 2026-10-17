@@ -1,12 +1,14 @@
 #!/usr/bin/env node
 // Scaffold or top up a Next.js + Tailwind 4 project for web-atelier, without overwriting anything.
-// Usage: node scaffold.mjs [project-root]
+// Usage: node scaffold.mjs [project-root] [--inventory]
 import { execSync } from "node:child_process";
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
-const root = path.resolve(process.argv[2] || process.cwd());
+const args = process.argv.slice(2);
+const withInventory = args.includes("--inventory");
+const root = path.resolve(args.find((a) => !a.startsWith("--")) || process.cwd());
 const skill = path.dirname(path.dirname(fileURLToPath(import.meta.url)));
 const log = (m) => console.log(`[atelier] ${m}`);
 const run = (cmd, cwd = root) => execSync(cmd, { cwd, stdio: ["ignore", "ignore", "inherit"], shell: true });
@@ -62,9 +64,34 @@ for (const [from, to] of copies) {
   copied++;
 }
 
+// 3b. Live stock module (only with --inventory)
+if (withInventory) {
+  const map = [
+    ["kit/inventory/lib/inventory", "src/lib/inventory"],
+    ["kit/inventory/app/api/inventory", "src/app/api/inventory"],
+    ["kit/inventory/components/inventory", "src/components/inventory"],
+    ["kit/inventory/content/inventory.demo.json", "src/content/inventory.demo.json"],
+  ];
+  for (const [from, to] of map) {
+    const dest = path.join(root, to);
+    if (fs.existsSync(dest)) continue;
+    fs.cpSync(path.join(skill, from), dest, { recursive: true });
+    copied++;
+  }
+  if (!have["server-only"]) run("npm install --no-audit --no-fund --loglevel=error server-only");
+  const envFile = path.join(root, ".env.example");
+  const block = fs.readFileSync(path.join(skill, "kit/inventory/env.example"), "utf8");
+  const current = fs.existsSync(envFile) ? fs.readFileSync(envFile, "utf8") : "";
+  if (!current.includes("INVENTORY_SOURCE")) fs.writeFileSync(envFile, current + block);
+  log("inventory module installed (INVENTORY_SOURCE=demo until configured)");
+}
+
 // 4. Folders and preview config
 for (const d of ["src/content", "src/components/sections", "src/components/shell", "src/components/signature", "public/images", ".atelier/shots", "strategy"])
   fs.mkdirSync(path.join(root, d), { recursive: true });
+// create-next-app ignores `.env*`; keep the documented example in git
+const gi = path.join(root, ".gitignore");
+if (fs.existsSync(gi) && !fs.readFileSync(gi, "utf8").includes("!.env.example")) fs.appendFileSync(gi, "\n!.env.example\n");
 const launch = path.join(root, ".claude", "launch.json");
 if (!fs.existsSync(launch)) {
   fs.mkdirSync(path.dirname(launch), { recursive: true });

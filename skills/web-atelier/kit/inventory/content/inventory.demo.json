@@ -1,0 +1,6 @@
+[
+  { "id": "demo-1", "name": "Demo product A", "price": 18.5, "currency": "EUR", "quantity": 12, "category": "Demo" },
+  { "id": "demo-2", "name": "Demo product B", "price": 24, "currency": "EUR", "quantity": 2, "category": "Demo" },
+  { "id": "demo-3", "name": "Demo product C", "price": 9.9, "currency": "EUR", "quantity": 0, "category": "Demo" },
+  { "id": "demo-4", "name": "Demo product D", "price": 32, "currency": "EUR", "status": "backorder", "category": "Demo" }
+]

@@ -16,6 +16,9 @@ Give the agent this file's path, `BRIEF.md`, `DESIGN.md`, `src/content/site.ts` 
 ## 3. Crawl files
 - `src/app/sitemap.ts` and `src/app/robots.ts` (Next metadata routes; check
   `node_modules/next/dist/docs/` for the current API if unsure).
+- **Pitch switch:** when `process.env.SITE_NOINDEX === "1"`, `robots.ts` returns `disallow: "/"` and the
+  root metadata sets `robots: { index: false, follow: false }`. Add `SITE_NOINDEX=1` to `.env.example`
+  with a comment "set while pitching; remove at go-live". Pitch builds deploy with it on.
 
 ## 4. Structured data
 - One `<script type="application/ld+json">` in the home page: the most specific schema.org
